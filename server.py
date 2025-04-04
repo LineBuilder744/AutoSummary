@@ -6,6 +6,11 @@ import sys
 from pydantic import BaseModel
 from typing import Optional, Dict, Any, List
 from utils.xml_utils import get_raw_test_xml, get_raw_summary_xml
+import uvicorn
+
+# Импортируем созданные нами модули с роутерами
+from generate import router as generate_router
+from xml_routes import router as xml_router
 
 app = FastAPI(title="DeepSeek AI API", description="API for interacting with DeepSeek AI")
 
@@ -239,8 +244,11 @@ async def create_test_xml(request: CreateXMLRequest):
 
 @app.get("/")
 async def root():
-    return {"message": "DeepSeek AI API is running. Use /generate endpoint to interact with DeepSeek AI."}
+    return {"message": "DeepSeek AI API is running. Available endpoints: /generate, /parse_xml, /create_summary_xml, /create_test_xml"}
+
+# Подключаем роутеры к приложению
+app.include_router(generate_router)
+app.include_router(xml_router)
 
 if __name__ == "__main__":
-    import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000, log_level="debug") 
