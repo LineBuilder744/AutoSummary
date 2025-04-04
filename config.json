@@ -1,0 +1,9 @@
+{
+    "api_token": "sk-55f993b2194d43f48c8893cdb89a1cec",
+    "prompt": "Explain what is artificial intelligence in simple terms",
+    "model": "deepseek-chat",
+    "max_tokens": 1000,
+    "temperature": 0.7,
+    "error_msg": "it is a test-error-message"
+}
+
