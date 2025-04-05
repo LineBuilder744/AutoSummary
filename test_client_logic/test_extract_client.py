@@ -206,12 +206,9 @@ def install_language(server_url, language):
 
 def main():
     # Настройка парсера аргументов
-    
-    
-
     # Тестирование извлечения текста различными методами
     
-    test_extract_from_path("http://localhost:8000", "88ss.png", "eng")
+    test_extract_from_path("http://localhost:8000", "test_client_logic/88ss.png", "eng")
     
 
 if __name__ == "__main__":

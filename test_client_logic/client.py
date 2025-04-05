@@ -2,7 +2,6 @@ import requests
 import json
 import sys
 import argparse
-from samples import summary_sample, text_sample
 
 def generate_summary(text):
 
@@ -181,9 +180,8 @@ def main():
     what_to_generate = input("What do you need? (summary/test): ")
 
     # Get text from file or user input
-    text = text_sample
-    summary = summary_sample
-    
+    text = open("test_client_logic/text.txt", "r").read()
+    summary = open("test_client_logic/summary.txt", "r").read()
     # Process based on user choice
     if what_to_generate.lower() == "summary":
         print("\nGenerating summary, please wait...")
@@ -211,12 +209,6 @@ def main():
     
     if what_to_generate.lower() == "test":
         # If we don't have a summary yet, we need to generate one first
-        if not 'summary' in locals() or summary == summary_sample:
-            print("\nGenerating summary for test creation, please wait...")
-            summary_response = generate_summary(text)
-            if summary_response:
-                summary = extract_summary(summary_response)
-        
         print(f"\nGenerating test with {5} questions, please wait...")
         test_response = generate_test(summary)
         
