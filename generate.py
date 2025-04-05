@@ -5,9 +5,12 @@ import sys
 import os
 from pydantic import BaseModel
 from typing import Optional, Dict, Any, List
+from config.config_manager import load_api_config
 
 # Создаем роутер для обработки запросов к /generate
 router = APIRouter()
+
+config = load_api_config()
 
 class DeepSeekRequest(BaseModel):
     prompt: str
@@ -22,59 +25,22 @@ class DeepSeekResponse(BaseModel):
     response: str
     raw_response: Dict[str, Any]
 
-# Path to configuration file
-CONFIG_FILE_PATH = os.path.join(os.path.dirname(__file__), "config.json")
-
-# Function to load API key from config file
-def load_api_token():
-    if not os.path.exists(CONFIG_FILE_PATH):
-        print(f"Warning: Config file not found at {CONFIG_FILE_PATH}")
-        return None
-    
-    try:
-        with open(CONFIG_FILE_PATH, 'r') as f:
-            config = json.load(f)
-            print(f"Config loaded: {json.dumps({k: '***' if k == 'api_token' else v for k, v in config.items()})}")
-            api_token = config.get('api_token')
-            if not api_token:
-                print("Warning: API token not found in config file")
-                # Check for legacy key name
-                api_token = config.get('api_key')
-                if api_token:
-                    print("Found token in legacy 'api_key' field - please update your config")
-            return api_token
-    except Exception as e:
-        print(f"Error loading config file: {e}")
-        return None
-
-async def get_api_token(x_api_token: Optional[str] = Header(None)) -> str:
-    # Try to get token from header first
-    if x_api_token:
-        print("Using API token from request header")
-        return x_api_token
-        
-    # Otherwise load from config file
-    print("No token in header, loading from config file")
-    api_token = load_api_token()
-    if not api_token:
-        raise HTTPException(status_code=401, detail="API token not found in header or config file")
-    print(f"Using API token from config file (length: {len(api_token)})")
-    return api_token
 
 @router.post("/generate", response_model=DeepSeekResponse)
-async def generate_response(request: DeepSeekRequest, api_token: str = Depends(get_api_token)):
+async def generate_response(request: DeepSeekRequest):
     """
     Generate a response from DeepSeek AI using the provided prompt
     """
+    api_token = config['api_token']
     # DeepSeek API endpoint
     api_url = "https://api.deepseek.com/v1/chat/completions"
     
     # Prepare the request payload
     payload = {
-        "model": request.model,
+        "model": config['model'],
         "messages": [{"role": "user", "content": request.prompt}],
-        "max_tokens": request.max_tokens,
-        "temperature": request.temperature,
+        "max_tokens": config['max_tokens'],
+        "temperature": config['temperature'],
         "top_p": request.top_p,
         "stream": request.stream
     }
