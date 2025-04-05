@@ -2,7 +2,7 @@ from fastapi import FastAPI
 import uvicorn
 
 # Импортируем созданные нами модули с роутерами
-from generate import router as generate_router
+from ai_prompts.generate import router as generate_router
 from extract_png.routes import router as extract_png_router
 
 
