@@ -1,8 +1,9 @@
    
 config = {
-    "api_token": "sk-55f993b2194d43f48c8893cdb89a1cec",
-    "model": "deepseek-chat",
-    "max_tokens": 1000,
-    "temperature": 0.5,
-    "api_url": "https://api.deepseek.com/v1/chat/completions"
+    "api_token": "AIzaSyA_EggPW8qfXnqjrD53T64e6gDsDtLgW9w",
+    "model": "gemini-2.0-flash",
+    "max_tokens": 8000,
+    "temperature": 0.7,
+    "api_url": "https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash:generateContent"
 }
+
