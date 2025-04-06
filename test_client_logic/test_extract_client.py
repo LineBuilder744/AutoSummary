@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
-import json
 import base64
-import argparse
 import os
-import sys
 import requests
 
 def test_extract_from_path(server_url, image_path, language="eng"):

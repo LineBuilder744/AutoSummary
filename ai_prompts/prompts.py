@@ -5,7 +5,7 @@ import sys
 import os
 from pydantic import BaseModel
 from typing import Optional, Dict, Any, List
-from config.config import config
+from ai_prompts.config import config
 
 # Создаем роутер для обработки запросов к /generate
 router = APIRouter()
@@ -42,7 +42,7 @@ async def generate_summary(request: PromptRequest):
             #### FORMAT REQUIREMENTS ####
             - Use the exact XML tags as shown in the example below.
             - If no text is provided, still use the tags but state "no text provided"
-            - Include ALL the important in formation.
+            - Include ALL the important information.
 
             Example format:
             <summary>
@@ -68,14 +68,28 @@ async def generate_summary(request: PromptRequest):
 async def generate_test(request: PromptRequest):
 
     GENERATE_TEST_PROMPT = f"""
-                
-    I have a summary in xml format. Make me a test which consists of {request.num_questions} questions.
-                Each question should have 4 variants of answers.
-                Each question should have only one correct answer.
-                Each answer must be short and consist of only 1-6 words.
-                The correct answer must not always be the first. So it must stand in a randomly counted location.
-                The test should be in xml format.
-                The test should be in the following format:
+
+            #### BASIC INFORMATION ####
+            You are a teacher making a test for the class on certain topic given as a summary.
+
+            #### TASK DESCRIPTION ####
+            Make a test which consists of {request.num_questions} easy questions USING ONLY INFORMATION FROM THE SUMMARY.
+
+            #### CRITICAL INSTRUCTIONS ####
+            1. USE ONLY INFORMATION FROM THE SUMMARY - do not make questions that cannot be answered using the summary.
+            2. ANSWERS MUST BE SHORT AND CONSIST OF ONLY 1-6 WORD - do not make long answers.
+            3. EACH QUESTION SHOULD HAVE ONLY ONE CORRECT ANSWER - do not make questions with multiple correct answers.
+            4. THE CORRECT ANSWER IS RANDOMLY COUNTED - do not make the correct answer the first one. It must stand in a randomly counted location.
+            5. EACH QUESTION SHOULD HAVE 4 VARIANTS OF ANSWERS - do not make questions with less or more than 4 variants of answers.
+            6. TOUCH EVERY TOPIC FROM THE SUMMARY - do not ignore any topic from the summary.
+            7. IF THERE IS A FORMULA ADD IT - if there is a formula (for example E=mc^2) or equation ADD IT to the test as a question (for example FORMULA: E=mc^2 -> QUESTION: E=mx^2 What is X?)
+
+            #### FORMAT REQUIREMENTS ####
+            - Use the exact XML tags as shown in the example below.
+            - If no text is provided, still use the tags but state "no text provided"
+            - Include ALL the topics from the summary in the test.
+
+            Example format:
                 <test>
                     <question>
                         <text>Question text</text>
@@ -97,10 +111,9 @@ async def generate_test(request: PromptRequest):
                         </answer>
                     </question>
                 </test>
-                here is the summary: {request.text}"""
-        
+            Here is the summary which you must use to make a test: {request.text}
+    """
     return await make_prompt(GENERATE_TEST_PROMPT, request)
-
 
 
 
