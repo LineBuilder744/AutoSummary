@@ -1,0 +1,8 @@
+   
+config = {
+    "api_token": "sk-55f993b2194d43f48c8893cdb89a1cec",
+    "model": "deepseek-chat",
+    "max_tokens": 1000,
+    "temperature": 0.5,
+    "api_url": "https://api.deepseek.com/v1/chat/completions"
+}
