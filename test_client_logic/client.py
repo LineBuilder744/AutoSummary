@@ -122,6 +122,50 @@ def png_to_text(image_path: str, language: str = "auto"):
         print(f"Произошла ошибка: {str(e)}")
         return {"error": str(e)}
 
+def pdf_to_text(pdf_path: str, language: str = "auto"):
+    """
+    Отправляет PDF файл на сервер для извлечения текста.
+    
+    Args:
+        pdf_path (str): Путь к PDF файлу
+        language (str): Язык текста в PDF (по умолчанию "auto")
+        
+    Returns:
+        dict: Ответ сервера с извлеченным текстом
+    """
+    server_url = 'http://localhost:8000'
+    endpoint = f"{server_url}/extract_text_from_pdf"
+
+    try:
+        # Проверяем существование файла
+        if not os.path.exists(pdf_path):
+            print(f"Ошибка: Файл не найден: {pdf_path}")
+            return {"error": "File not found"}
+            
+        # Открываем файл для отправки
+        with open(pdf_path, "rb") as pdf_file:
+            # Создаем multipart/form-data запрос
+            files = {"file": (os.path.basename(pdf_path), pdf_file, "application/pdf")}
+            data = {"language": language}
+            
+            # Отправляем запрос на сервер
+            response = requests.post(endpoint, files=files, data=data)
+        
+        # Проверяем ответ
+        if response.status_code == 200:
+            result = response.json()
+            print(f"Текст успешно извлечен из PDF")
+            print(f"Количество символов: {len(result.get('text', ''))}")
+            return result
+        else:
+            print(f"Ошибка: {response.status_code}")
+            print(response.text)
+            return {"error": f"Server returned status code {response.status_code}"}
+            
+    except Exception as e:
+        print(f"Произошла ошибка: {str(e)}")
+        return {"error": str(e)}
+
 def extract_test(response):
     """
     Extracts the test XML from the response
@@ -143,11 +187,53 @@ def extract_test(response):
     return response
 
 def main():
+    what_to_generate = input("What do you need? (summary/test/extract_image/extract_pdf): ")
 
-    what_to_generate = input("What do you need? (summary/test/png): ")
+    # Если пользователь выбрал извлечение текста из PDF
+    if what_to_generate.lower() == "extract_pdf":
+        pdf_path = input("Введите путь к PDF файлу: ")
+        language = input("Введите язык текста (оставьте пустым для auto): ") or "auto"
+        
+        print("\nИзвлечение текста из PDF, пожалуйста, подождите...")
+        result = pdf_to_text(pdf_path, language)
+        
+        if result and "error" not in result:
+            extracted_text = result.get("text", "")
+            print("\n--- Извлеченный текст ---\n")
+            print(extracted_text)
+            
+            # Сохраняем в файл
+            output_file = "extracted_text.txt"
+            try:
+                with open(output_file, 'w', encoding='utf-8') as f:
+                    f.write(extracted_text)
+                print(f"\nТекст сохранен в файл {output_file}")
+            except Exception as e:
+                print(f"Ошибка при сохранении текста: {str(e)}")
+                
+            # Спрашиваем, хочет ли пользователь сгенерировать summary из этого текста
+            generate_summary_prompt = input("\nХотите создать конспект из этого текста? (да/нет): ")
+            if generate_summary_prompt.lower() in ["да", "yes", "y", "д"]:
+                print("\nГенерация конспекта, пожалуйста, подождите...")
+                summary_response = generate_summary(extracted_text)
+                
+                if summary_response:
+                    summary = extract_summary(summary_response)
+                    print("\n--- Сгенерированный конспект ---\n")
+                    print(summary)
+                    
+                    # Сохраняем в файл
+                    output_file = "summary_output.xml"
+                    try:
+                        with open(output_file, 'w', encoding='utf-8') as f:
+                            f.write(summary)
+                        print(f"\nКонспект сохранен в файл {output_file}")
+                    except Exception as e:
+                        print(f"Ошибка при сохранении конспекта: {str(e)}")
+        return
 
     # Если пользователь выбрал извлечение текста из изображения
-    if what_to_generate.lower() == "png":
+    elif what_to_generate.lower() == "extract_image":
         image_path = input("Введите путь к изображению: ")
         language = input("Введите язык текста (оставьте пустым для auto): ") or "auto"
         
@@ -188,7 +274,7 @@ def main():
                     except Exception as e:
                         print(f"Ошибка при сохранении конспекта: {str(e)}")
         return
-        
+
     # Get text from file or user input
     text = open("text.txt", "r").read()
     summary = open("summary.txt", "r").read()
