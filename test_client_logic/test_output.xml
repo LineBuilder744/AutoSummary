@@ -1,0 +1,97 @@
+<test>
+    <question>
+        <text>What do intelligent agents do in their environment?</text>
+        <answer>
+            <text>Ignore it</text>
+            <is_correct>false</is_correct>
+        </answer>
+        <answer>
+            <text>Achieve goals</text>
+            <is_correct>true</is_correct>
+        </answer>
+        <answer>
+            <text>Destroy it</text>
+            <is_correct>false</is_correct>
+        </answer>
+        <answer>
+            <text>Nothing</text>
+            <is_correct>false</is_correct>
+        </answer>
+    </question>
+    <question>
+        <text>AI definition has evolved from mimicking human skills to?</text>
+        <answer>
+            <text>Acting irrationally</text>
+            <is_correct>false</is_correct>
+        </answer>
+        <answer>
+            <text>Acting randomly</text>
+            <is_correct>false</is_correct>
+        </answer>
+        <answer>
+            <text>Acting rationally</text>
+            <is_correct>true</is_correct>
+        </answer>
+        <answer>
+            <text>Acting humanly</text>
+            <is_correct>false</is_correct>
+        </answer>
+    </question>
+    <question>
+        <text>Which of these is NOT a common AI application?</text>
+        <answer>
+            <text>Self-driving cars</text>
+            <is_correct>false</is_correct>
+        </answer>
+        <answer>
+            <text>Teleportation</text>
+            <is_correct>true</is_correct>
+        </answer>
+        <answer>
+            <text>Speech recognition</text>
+            <is_correct>false</is_correct>
+        </answer>
+        <answer>
+            <text>Search engines</text>
+            <is_correct>false</is_correct>
+        </answer>
+    </question>
+    <question>
+        <text>What happens to tasks as machines become more capable?</text>
+        <answer>
+            <text>Added to AI definition</text>
+            <is_correct>false</is_correct>
+        </answer>
+        <answer>
+            <text>Ignored</text>
+            <is_correct>false</is_correct>
+        </answer>
+        <answer>
+            <text>Removed from AI definition</text>
+            <is_correct>true</is_correct>
+        </answer>
+        <answer>
+            <text>Nothing happens</text>
+            <is_correct>false</is_correct>
+        </answer>
+    </question>
+    <question>
+        <text>What is a long-term goal of AI research?</text>
+        <answer>
+            <text>Reasoning</text>
+            <is_correct>false</is_correct>
+        </answer>
+        <answer>
+            <text>Object manipulation</text>
+            <is_correct>false</is_correct>
+        </answer>
+        <answer>
+            <text>General intelligence</text>
+            <is_correct>true</is_correct>
+        </answer>
+        <answer>
+            <text>Planning</text>
+            <is_correct>false</is_correct>
+        </answer>
+    </question>
+</test>
