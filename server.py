@@ -2,8 +2,8 @@ from fastapi import FastAPI
 import uvicorn
 
 # Импортируем созданные нами модули с роутерами
-from ai_prompts.generate_prompts import router as prompts_router
-from ai_prompts.extraction_prompts import router as text_extraction_router
+from ai_prompts.generate import router as prompts_router
+from ai_prompts.extract_text import router as text_extraction_router
 
 # Создаем экземпляр FastAPI
 app = FastAPI(title="AI Summary", description="Makes summary from the text and generates tests of this summary for better learning")

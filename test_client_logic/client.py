@@ -79,16 +79,6 @@ def extract_summary(response):
     return response
 
 def png_to_text(image_path: str, language: str = "auto"):
-    """
-    Отправляет изображение на сервер для извлечения текста.
-    
-    Args:
-        image_path (str): Путь к файлу изображения
-        language (str): Язык текста в изображении (по умолчанию "auto")
-        
-    Returns:
-        dict: Ответ сервера с извлеченным текстом
-    """
     server_url = 'http://localhost:8000'
     endpoint = f"{server_url}/extract_text_from_pic"
 
@@ -112,6 +102,7 @@ def png_to_text(image_path: str, language: str = "auto"):
             result = response.json()
             print(f"Текст успешно извлечен из изображения")
             print(f"Количество символов: {len(result.get('text', ''))}")
+            print(result)
             return result
         else:
             print(f"Ошибка: {response.status_code}")
@@ -186,8 +177,97 @@ def extract_test(response):
     # Return the full response if we can't extract the test
     return response
 
+def multi_pics_to_text(image_paths: list, language: str = "auto"):
+    """
+    Отправляет несколько изображений на сервер для извлечения текста.
+    
+    Args:
+        image_paths (list): Список путей к изображениям
+        language (str): Язык текста (по умолчанию "auto")
+        
+    Returns:
+        dict: Ответ сервера с извлеченным текстом
+    """
+    server_url = 'http://localhost:8000'
+    endpoint = f"{server_url}/extract_text_from_multiple_pics"
+
+    try:
+        # Проверяем существование файлов
+        for path in image_paths:
+            if not os.path.exists(path):
+                print(f"Ошибка: Файл не найден: {path}")
+                return {"error": f"File not found: {path}"}
+            
+        # Подготавливаем файлы для отправки
+        files = []
+        for path in image_paths:
+            files.append(('files', (os.path.basename(path), open(path, 'rb'), 'image/jpeg')))
+        
+        # Добавляем language в data
+        data = {"language": language}
+        
+        # Отправляем запрос на сервер
+        response = requests.post(endpoint, files=files, data=data)
+        
+        # Закрываем все файлы
+        for f in files:
+            f[1][1].close()
+        
+        # Проверяем ответ
+        if response.status_code == 200:
+            result = response.json()
+            print(f"Текст успешно извлечен из {len(image_paths)} изображений")
+            print(f"Количество символов: {len(result.get('text', ''))}")
+            return result
+        else:
+            print(f"Ошибка: {response.status_code}")
+            print(response.text)
+            return {"error": f"Server returned status code {response.status_code}"}
+            
+    except Exception as e:
+        print(f"Произошла ошибка: {str(e)}")
+        return {"error": str(e)}
+
+
 def main():
-    what_to_generate = input("What do you need? (summary/test/extract_image/extract_pdf): ")
+    what_to_generate = input("What do you need? (summary/test/extract_image/extract_pdf/extract_multi_pics): ")
+
+    # Если пользователь выбрал извлечение текста из нескольких изображений
+    if what_to_generate.lower() == "extract_multi_pics":
+        print("Введите пути к изображениям (по одному на строку). Введите '0' для завершения:")
+        image_paths = []
+        while True:
+            path = input(f"Изображение {len(image_paths)+1}: ").strip()
+            if path == '0':
+                break
+            if path:  # Игнорируем пустые строки
+                image_paths.append(path)
+        
+        if not image_paths:
+            print("Не указано ни одного изображения!")
+            return
+            
+        language = input("Введите язык текста (оставьте пустым для auto): ") or "auto"
+        
+        print(f"\nИзвлечение текста из {len(image_paths)} изображений, пожалуйста, подождите...")
+        result = multi_pics_to_text(image_paths, language)
+        
+        if result and "error" not in result:
+            extracted_text = result.get("text", "")
+            print("\n--- Извлеченный текст ---\n")
+            print(extracted_text)
+            
+            # Сохраняем в файл
+            output_file = "extracted_text_multi.txt"
+            try:
+                with open(output_file, 'w', encoding='utf-8') as f:
+                    f.write(extracted_text)
+                print(f"\nТекст сохранен в файл {output_file}")
+            except Exception as e:
+                print(f"Ошибка при сохранении текста: {str(e)}")
+                
+            # Спрашиваем, хочет ли пользователь сгенерировать summary из этого текста
+            generate_summary_prompt = input("\nХотите создать конспект из этого текста? (да/нет): ")
 
     # Если пользователь выбрал извлечение текста из PDF
     if what_to_generate.lower() == "extract_pdf":

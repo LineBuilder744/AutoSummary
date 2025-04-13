@@ -1,16 +1,16 @@
 <test>
     <question>
-        <text>What do intelligent agents do in their environment?</text>
+        <text>What do intelligent agents do?</text>
         <answer>
-            <text>Ignore it</text>
-            <is_correct>false</is_correct>
-        </answer>
-        <answer>
-            <text>Achieve goals</text>
+            <text>Perceive and achieve goals</text>
             <is_correct>true</is_correct>
         </answer>
         <answer>
-            <text>Destroy it</text>
+            <text>Eat and sleep</text>
+            <is_correct>false</is_correct>
+        </answer>
+        <answer>
+            <text>Destroy everything</text>
             <is_correct>false</is_correct>
         </answer>
         <answer>
@@ -19,40 +19,40 @@
         </answer>
     </question>
     <question>
-        <text>AI definition has evolved from mimicking human skills to?</text>
+        <text>What did AI definition evolve from?</text>
         <answer>
-            <text>Acting irrationally</text>
+            <text>Systems acting rationally</text>
             <is_correct>false</is_correct>
         </answer>
         <answer>
-            <text>Acting randomly</text>
-            <is_correct>false</is_correct>
-        </answer>
-        <answer>
-            <text>Acting rationally</text>
+            <text>Mimicking human cognitive skills</text>
             <is_correct>true</is_correct>
         </answer>
         <answer>
-            <text>Acting humanly</text>
+            <text>Machines acting illogically</text>
+            <is_correct>false</is_correct>
+        </answer>
+        <answer>
+            <text>Animals showing intelligence</text>
             <is_correct>false</is_correct>
         </answer>
     </question>
     <question>
-        <text>Which of these is NOT a common AI application?</text>
+        <text>Which of the following uses AI?</text>
         <answer>
-            <text>Self-driving cars</text>
-            <is_correct>false</is_correct>
-        </answer>
-        <answer>
-            <text>Teleportation</text>
+            <text>Creative tools</text>
             <is_correct>true</is_correct>
         </answer>
         <answer>
-            <text>Speech recognition</text>
+            <text>Paper clip</text>
             <is_correct>false</is_correct>
         </answer>
         <answer>
-            <text>Search engines</text>
+            <text>Door</text>
+            <is_correct>false</is_correct>
+        </answer>
+        <answer>
+            <text>Table</text>
             <is_correct>false</is_correct>
         </answer>
     </question>
@@ -63,7 +63,7 @@
             <is_correct>false</is_correct>
         </answer>
         <answer>
-            <text>Ignored</text>
+            <text>Stay in AI definition</text>
             <is_correct>false</is_correct>
         </answer>
         <answer>
@@ -71,18 +71,18 @@
             <is_correct>true</is_correct>
         </answer>
         <answer>
-            <text>Nothing happens</text>
+            <text>No change</text>
             <is_correct>false</is_correct>
         </answer>
     </question>
     <question>
         <text>What is a long-term goal of AI research?</text>
         <answer>
-            <text>Reasoning</text>
+            <text>Narrow intelligence</text>
             <is_correct>false</is_correct>
         </answer>
         <answer>
-            <text>Object manipulation</text>
+            <text>Specific intelligence</text>
             <is_correct>false</is_correct>
         </answer>
         <answer>
@@ -90,7 +90,7 @@
             <is_correct>true</is_correct>
         </answer>
         <answer>
-            <text>Planning</text>
+            <text>Focused intelligence</text>
             <is_correct>false</is_correct>
         </answer>
     </question>
