@@ -42,8 +42,17 @@ async def gemini_request(system_prompt: str, contents) -> GeminiResponse:
         )
 
         response = await model.generate_content_async(contents)
-        # Извлекаем текст из ответа
-        response_text = response.text
+
+        print(response)
+        # Извлекаем текст из ответа, обрабатываем возможные ошибки
+        try:
+            response_text = response.text
+        except ValueError as e:
+            # Обработка случая, когда text недоступен из-за copyright или других причин
+            if "finish_reason" in str(e) and "4" in str(e):
+                response_text = "Не удалось обработать данный контент из-за возможных проблем с авторскими правами."
+            else:
+                response_text = f"Не удалось получить текст из ответа: {str(e)}"
         
         # Возвращаем GeminiResponse с текстом и сырым ответом
         return GeminiResponse(

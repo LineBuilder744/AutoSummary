@@ -178,16 +178,6 @@ def extract_test(response):
     return response
 
 def multi_pics_to_text(image_paths: list, language: str = "auto"):
-    """
-    Отправляет несколько изображений на сервер для извлечения текста.
-    
-    Args:
-        image_paths (list): Список путей к изображениям
-        language (str): Язык текста (по умолчанию "auto")
-        
-    Returns:
-        dict: Ответ сервера с извлеченным текстом
-    """
     server_url = 'http://localhost:8000'
     endpoint = f"{server_url}/extract_text_from_multiple_pics"
 
@@ -253,9 +243,9 @@ def main():
         result = multi_pics_to_text(image_paths, language)
         
         if result and "error" not in result:
-            extracted_text = result.get("text", "")
+            
             print("\n--- Извлеченный текст ---\n")
-            print(extracted_text)
+            print(result)
             
             # Сохраняем в файл
             output_file = "extracted_text_multi.txt"
