@@ -18,10 +18,10 @@ async def root():
         "message": "AI API is running. Available endpoints:",
         "endpoints": [
             "/extract_text_png",
-            "/upload_and_extract",
             "/generate_summary",
             "/generate_test",
-            "/extract_text_from_pic"
+            "/extract_text_from_pics",
+            "/extract_text_from_pdf"
         ]
     }
 

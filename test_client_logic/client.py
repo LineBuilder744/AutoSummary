@@ -179,7 +179,7 @@ def extract_test(response):
 
 def multi_pics_to_text(image_paths: list, language: str = "auto"):
     server_url = 'http://localhost:8000'
-    endpoint = f"{server_url}/extract_text_from_multiple_pics"
+    endpoint = f"{server_url}/extract_text_from_pics"
 
     try:
         # Проверяем существование файлов

@@ -33,7 +33,7 @@ def _create_generation_config() -> GenerationConfig:
         max_output_tokens=config["max_tokens"]
     )
 
-async def gemini_request(system_prompt: str, contents) -> GeminiResponse:
+async def make_prompt(system_prompt: str, contents) -> GeminiResponse:
     try:
         model = genai.GenerativeModel(
             model_name=config["model"],
@@ -42,8 +42,6 @@ async def gemini_request(system_prompt: str, contents) -> GeminiResponse:
         )
 
         response = await model.generate_content_async(contents)
-
-        print(response)
         # Извлекаем текст из ответа, обрабатываем возможные ошибки
         try:
             response_text = response.text
