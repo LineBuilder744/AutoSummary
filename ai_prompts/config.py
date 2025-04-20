@@ -1,7 +1,5 @@
 
 
-
-
 config = {
     "api_token": "AIzaSyBIK7bedHBtOacNMoCYxAU9iUKaqLcX_6Q",
     "model": "gemini-2.0-flash",

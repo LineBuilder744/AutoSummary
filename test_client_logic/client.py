@@ -1,6 +1,5 @@
 import requests
 import os
-
 def generate_summary(text):
 
     server_url="http://localhost:8000"
@@ -218,6 +217,46 @@ def multi_pics_to_text(image_paths: list, language: str = "auto"):
         print(f"Произошла ошибка: {str(e)}")
         return {"error": str(e)}
 
+def save_summary_to_db(title, content, subject=None):
+    """
+    Saves a summary to the database
+    
+    Args:
+        title (str): Title of the summary
+        content (str): Content of the summary
+        subject (str, optional): Subject of the summary
+        
+    Returns:
+        int or None: ID of the created summary or None if failed
+    """
+    server_url = 'http://localhost:8000'
+    endpoint = f"{server_url}/summaries/"
+    
+    headers = {
+        "Content-Type": "application/json",
+        "accept": "application/json"
+    }
+    
+    payload = {
+        "title": title,
+        "content": content,
+        "subject": subject
+    }
+    
+    try:
+        response = requests.post(endpoint, json=payload, headers=headers)
+        
+        if response.status_code == 201:
+            return response.json()
+        else:
+            print(f"Error saving to database: {response.status_code}")
+            print(response.text)
+            return None
+    except Exception as e:
+        print(f"An error occurred while saving to database: {str(e)}")
+        return None
+
+
 
 def main():
     what_to_generate = input("What do you need? (summary/test/extract_image/extract_pdf/extract_multi_pics): ")
@@ -300,6 +339,16 @@ def main():
                         print(f"\nКонспект сохранен в файл {output_file}")
                     except Exception as e:
                         print(f"Ошибка при сохранении конспекта: {str(e)}")
+                    
+                    # Сохраняем конспект в базу данных
+                    save_to_db = input("\nХотите сохранить конспект в базу данных? (да/нет): ")
+                    if save_to_db.lower() in ["да", "yes", "y", "д"]:
+                        title = input("Введите название конспекта: ")
+                        subject = input("Введите предмет (оставьте пустым, если нет): ") or None
+                        
+                        summary_id = save_summary_to_db(title, summary, subject)
+                        if summary_id:
+                            print(f"\nКонспект успешно сохранен в базу данных с ID: {summary_id}")
         return
 
     # Если пользователь выбрал извлечение текста из изображения
@@ -343,6 +392,16 @@ def main():
                         print(f"\nКонспект сохранен в файл {output_file}")
                     except Exception as e:
                         print(f"Ошибка при сохранении конспекта: {str(e)}")
+                    
+                    # Сохраняем конспект в базу данных
+                    save_to_db = input("\nХотите сохранить конспект в базу данных? (да/нет): ")
+                    if save_to_db.lower() in ["да", "yes", "y", "д"]:
+                        title = input("Введите название конспекта: ")
+                        subject = input("Введите предмет (оставьте пустым, если нет): ") or None
+                        
+                        summary_id = save_summary_to_db(title, summary, subject)
+                        if summary_id:
+                            print(f"\nКонспект успешно сохранен в базу данных с ID: {summary_id}")
         return
 
     # Get text from file or user input
@@ -367,6 +426,16 @@ def main():
                 print(f"\nSummary saved to {output_file}")
             except Exception as e:
                 print(f"Error saving summary: {str(e)}")
+            
+            # Save summary to database
+            save_to_db = input("\nDo you want to save this summary to the database? (yes/no): ")
+            if save_to_db.lower() in ["yes", "y", "да", "д"]:
+                title = input("Enter a title for the summary: ")
+                subject = input("Enter a subject (leave empty if none): ") or None
+                
+                summary_id = save_summary_to_db(title, summary, subject)
+                if summary_id:
+                    print(f"\nSummary successfully saved to database with ID: {summary_id}")
                 
             # Ask if user wants to generate a test from this summary
             generate_test_prompt = input("\nDo you want to generate a test from this summary? (yes/no): ")
@@ -396,4 +465,6 @@ def main():
         print("Invalid option. Please choose 'summary' or 'test'.")
 
 if __name__ == "__main__":
-    main() 
+    main()
+
+

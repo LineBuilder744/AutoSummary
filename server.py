@@ -4,6 +4,7 @@ import uvicorn
 # Импортируем созданные нами модули с роутерами
 from ai_prompts.generate import router as prompts_router
 from ai_prompts.extract_text import router as text_extraction_router
+from db.db_router import router as db_router
 
 # Создаем экземпляр FastAPI
 app = FastAPI(title="AI Summary", description="Makes summary from the text and generates tests of this summary for better learning")
@@ -11,6 +12,7 @@ app = FastAPI(title="AI Summary", description="Makes summary from the text and g
 # Подключаем роутеры к приложению
 app.include_router(prompts_router)
 app.include_router(text_extraction_router)
+app.include_router(db_router)
 
 @app.get("/")
 async def root():
@@ -21,7 +23,15 @@ async def root():
             "/generate_summary",
             "/generate_test",
             "/extract_text_from_pics",
-            "/extract_text_from_pdf"
+            "/extract_text_from_pdf",
+            "/summaries/(POST)",
+            "/summaries/(GET)",
+            "/summaries/(PUT)",
+            "/summaries/[summary_id](DELETE)",
+            "/summaries/[summary_id](GET)",
+            "/summaries/subject/[subject_name]",
+            "/summaries/title/[title]",
+
         ]
     }
 
