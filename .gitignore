@@ -1,0 +1,15 @@
+# Виртуальное окружение Python
+venv/
+env/
+.env
+
+# Кэш Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Логи
+*.log
+
+# Локальные настройки
+config.local.py

@@ -1,9 +1,13 @@
 # ai_prompts/gemini_prompts.py
 import google.generativeai as genai
+from google.generativeai.types import GenerationConfig 
 from fastapi import HTTPException
 import traceback
-from .utils import AIResponse, _create_generation_config, cast_response_to_dict
-from .config import config
+from .utils import AIResponse, cast_response_to_dict
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
 # Настройка клиента Gemini
 try:
     genai.configure(api_key=config.get("api_token"))
@@ -14,9 +18,13 @@ except Exception as e:
 async def make_prompt(system_prompt: str, contents) -> AIResponse:
     try:
         model = genai.GenerativeModel(
-            model_name=config["model"],
+            model_name=os.getenv("MODEL"),
             system_instruction=system_prompt,
-            generation_config=_create_generation_config()
+            generation_config=GenerationConfig(
+                temperature=os.getenv("TEMPERATURE"),
+                top_p=os.getenv("TOP_P"),
+                ax_output_tokens=os.getenv("MAX_TOKENS"),
+    )
         )
 
         response = await model.generate_content_async(contents)

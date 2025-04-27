@@ -1,8 +1,6 @@
 from typing import Dict, Any, Optional
 from pydantic import BaseModel
-from google.generativeai.types import GenerationConfig, AsyncGenerateContentResponse
-from .config import config
-
+from google.generativeai.types import AsyncGenerateContentResponse
 
 class AIRequest(BaseModel):
     text: str
@@ -14,15 +12,7 @@ class AIRequest(BaseModel):
 
 class AIResponse(BaseModel):
     response: str
-    raw_response: Dict[str, Any]
-
-def _create_generation_config() -> GenerationConfig:
-    
-    return GenerationConfig(
-        temperature=config["temperature"],
-        top_p=config["top_p"],
-        max_output_tokens=config["max_tokens"]
-    )
+    raw_response: Dict[str, Any] 
 
 def cast_response_to_dict(response: AsyncGenerateContentResponse) -> Dict[str, Any]:
     """Преобразует AsyncGenerateContentResponse в словарь."""
