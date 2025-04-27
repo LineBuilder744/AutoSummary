@@ -2,8 +2,8 @@ from fastapi import FastAPI
 import uvicorn
 
 # Импортируем созданные нами модули с роутерами
-from services.generation.generate_router import router as generate_router
-from services.extraction.extraction_router import router as extract_router
+from services.ai_services.generation.generate_router import router as generate_router
+from services.ai_services.extraction.extraction_router import router as extract_router
 
 # Создаем экземпляр FastAPI
 app = FastAPI(title="AI Summary", description="Makes summary from the text and generates tests of this summary for better learning")

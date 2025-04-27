@@ -1,0 +1,10 @@
+
+
+config = {
+    "api_token": "AIzaSyBIK7bedHBtOacNMoCYxAU9iUKaqLcX_6Q",
+    "model": "gemini-2.0-flash",
+    "max_tokens": 8000,
+    "temperature": 0.7,
+    "top_p": 0.95,
+    "api_url": "https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash:generateContent"
+}
