@@ -15,7 +15,8 @@ ALLOWED_MIME_TYPES = {
         "application/vnd.openxmlformats-officedocument.wordprocessingml.document",  # docx
         "application/msword",  # doc
         "application/vnd.ms-word"  # также doc
-    ]
+    ],
+    "txt": ["text/plain"] 
 }
 
 def validate_file_size(file: UploadFile, max_size_mb: int = MAX_FILE_SIZE_MB) -> None:

@@ -6,6 +6,7 @@ from pdf2image import convert_from_bytes
 from docx import Document
 import xml.etree.ElementTree as ET
 from xml.dom import minidom
+import base64
 
 async def convert_uploadfile_to_pil_image(upload_file: UploadFile) -> Image.Image:
     # Чтение байтов из файла
@@ -42,8 +43,16 @@ def convert_pdf_to_images(
         # Конвертируем в RGB, если нужно (для JPEG)
         if fmt.lower() == 'jpeg':
             images = [image.convert('RGB') for image in images]
+        
+        base64_images = []
+        for image in pil_images:
+            buffer = io.BytesIO()
+            image.save(buffer, format=fmt.upper())
+            img_str = base64.b64encode(buffer.getvalue()).decode('utf-8')
+            base64_images.append(img_str)
             
-        return images
+        return base64_images
+
         
     except Exception as e:
         raise ValueError(f"Ошибка конвертации PDF: {str(e)}")
@@ -94,9 +103,16 @@ def get_text_from_docx(doc_bytes: bytes) -> str:
         return reparsed.toprettyxml(indent="  ").replace('<?xml version="1.0" ?>\n', '')
 
 
-def get_png_payload(prompt: str, images: List[Image.Image]) -> List[Union[str, Image.Image]]:
-    contents = [prompt]
-    contents.extend(images)
+
+def get_png_payload(prompt: str, images_base64: str) -> list:
+
+    contents = [{ "type": "input_text", "text": prompt},]
+
+    for image_base64 in images_base64:
+        contents.append({
+        "type": "input_image",
+        "image_url": f"data:image/jpeg;base64,{image_base64}",
+        },)
     return contents
 
 def get_pdf_payload(prompt: str, pdf_bytes: bytes) -> list:

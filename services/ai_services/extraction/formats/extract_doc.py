@@ -2,7 +2,7 @@ from fastapi import HTTPException, UploadFile, File, Form
 from typing import List, Optional
 import logging
 # Switch back to absolute imports
-from services.ai_services.ai_utils.make_prompt import make_prompt
+from services.ai_services.ai_utils.openrouter_prompt import openrouter_prompt
 from services.ai_services.ai_utils.system_prompts import get_summary_sys_prompt
 from services.ai_services.extraction.formats.format_utils.format_utils import get_text_from_docx
 from services.ai_services.ai_utils.utils import AIResponse
@@ -28,7 +28,7 @@ async def extract_doc(
         result = get_text_from_docx(doc_bytes)
 
         if(summarize):
-            return await make_prompt(
+            return await openrouter_prompt(
                 system_prompt=get_summary_sys_prompt(language),
                 contents=result)
 

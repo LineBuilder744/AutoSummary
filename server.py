@@ -19,6 +19,8 @@ async def root():
         "endpoints": [
             "/extract/png",
             "/extract/pdf",
+            "/extract/doc",
+            "/extract/txt",
             "/generate/summary",
             "/generate/test",
 
